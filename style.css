@@ -22,14 +22,16 @@ body {
   overflow-x: hidden;
 }
 
-/* background glow bergerak */
+/* background glow — static di HP, animasi ringan di desktop */
 .bg-glow {
   position: fixed; inset: 0; z-index: -1;
   background:
     radial-gradient(700px 500px at 15% 10%, rgba(155,231,255,0.10), transparent 70%),
     radial-gradient(800px 600px at 85% 90%, rgba(255,155,231,0.08), transparent 70%),
     radial-gradient(500px 400px at 50% 50%, rgba(180,125,255,0.05), transparent 70%);
-  animation: drift 24s ease-in-out infinite alternate;
+}
+@media (min-width: 701px) {
+  .bg-glow { animation: drift 24s ease-in-out infinite alternate; }
 }
 @keyframes drift {
   to { transform: translate3d(0, 40px, 0); filter: hue-rotate(40deg); }
@@ -72,9 +74,9 @@ body {
   border-radius: 14px;
   padding: 24px;
   margin-bottom: 22px;
-  backdrop-filter: blur(10px);
   box-shadow: 0 0 24px rgba(0,0,0,0.35);
 }
+@media (min-width: 701px) { .card { backdrop-filter: blur(10px); } }
 .card h2, h2.neon-sub {
   font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
   color: var(--neon); font-weight: 500; margin-bottom: 14px;
