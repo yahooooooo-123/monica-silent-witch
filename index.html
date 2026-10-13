@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,6 +13,9 @@
 
   <!-- glow latar -->
   <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- THEME TOGGLE -->
+  <button id="theme-btn" class="theme-toggle" aria-label="Ganti theme">☀️</button>
 
   <!-- HEADER / HERO -->
   <header class="header">
@@ -209,6 +212,23 @@ type();
 // reveal on scroll
 const io = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('in') }), {threshold: 0.12});
 document.querySelectorAll('.anim').forEach(c => io.observe(c));
+
+// dark/light mode
+const root = document.documentElement;
+const btn  = document.getElementById('theme-btn');
+function setIcon(t){ btn.textContent = t === 'dark' ? '☀️' : '🌙'; }
+function apply(t){
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('mw-theme', t);
+  setIcon(t);
+}
+const saved = localStorage.getItem('mw-theme');
+if(saved) apply(saved);
+else { root.setAttribute('data-theme','dark'); setIcon('dark'); }
+btn.addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+  apply(cur === 'dark' ? 'light' : 'dark');
+});
 </script>
 </body>
 </html>

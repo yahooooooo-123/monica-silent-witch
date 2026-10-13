@@ -1,7 +1,7 @@
 /* ================================================================
-   style.css — Monica Everett (dark neon, glass cards, glow)
+   style.css — Monica Everett (dark/light, glass cards, glow)
    ================================================================ */
-:root {
+[data-theme="dark"] {
   --bg:    #06060a;
   --card:  rgba(20, 20, 30, 0.72);
   --line:  rgba(155, 231, 255, 0.14);
@@ -12,6 +12,17 @@
   --mag:   #b47dff;   /* ungu */
 }
 
+[data-theme="light"] {
+  --bg:    #f1f3f8;
+  --card:  rgba(255, 255, 255, 0.85);
+  --line:  rgba(30, 60, 120, 0.16);
+  --text:  #181826;
+  --dim:   #5d5d75;
+  --neon:  #1565c0;   /* biru siang */
+  --neon2: #a92fb3;   /* magenta siang */
+  --mag:   #5e35b1;
+}
+
 * { margin:0; padding:0; box-sizing:border-box; }
 
 body {
@@ -20,6 +31,7 @@ body {
   font-family: "Inter", system-ui, sans-serif;
   line-height: 1.7;
   overflow-x: hidden;
+  transition: background .35s ease, color .35s ease;
 }
 
 /* background glow — static di HP, animasi ringan di desktop */
@@ -29,6 +41,13 @@ body {
     radial-gradient(700px 500px at 15% 10%, rgba(155,231,255,0.10), transparent 70%),
     radial-gradient(800px 600px at 85% 90%, rgba(255,155,231,0.08), transparent 70%),
     radial-gradient(500px 400px at 50% 50%, rgba(180,125,255,0.05), transparent 70%);
+  transition: opacity .35s ease;
+}
+[data-theme="light"] .bg-glow {
+  background:
+    radial-gradient(700px 500px at 15% 10%, rgba(21,101,192,0.10), transparent 70%),
+    radial-gradient(800px 600px at 85% 90%, rgba(169,47,179,0.08), transparent 70%),
+    radial-gradient(500px 400px at 50% 50%, rgba(94,53,177,0.06), transparent 70%);
 }
 @media (min-width: 701px) {
   .bg-glow { animation: drift 24s ease-in-out infinite alternate; }
@@ -36,6 +55,20 @@ body {
 @keyframes drift {
   to { transform: translate3d(0, 40px, 0); filter: hue-rotate(40deg); }
 }
+
+/* ---------- theme toggle ---------- */
+.theme-toggle {
+  position: fixed; top: 16px; right: 16px; z-index: 50;
+  width: 44px; height: 44px; border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--text);
+  font-size: 20px; line-height: 1;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 18px rgba(0,0,0,.25);
+}
+.theme-toggle:active { transform: scale(.94); }
 
 /* ---------- header ---------- */
 .header { text-align:center; padding: 90px 20px 55px; }
@@ -47,9 +80,15 @@ body {
 .neon-title {
   font-family: "Cinzel", serif;
   font-size: clamp(2.4rem, 8vw, 4.2rem);
-  font-weight: 600; color: #fff; letter-spacing: 2px;
+  font-weight: 600; letter-spacing: 2px;
+  color: #fff;
   text-shadow: 0 0 10px var(--neon), 0 0 25px var(--neon), 0 0 60px var(--neon2);
   animation: pulse 4s ease-in-out infinite;
+}
+[data-theme="light"] .neon-title {
+  color: #101828;
+  text-shadow: 0 0 12px rgba(21,101,192,.35), 0 0 30px rgba(169,47,179,.25);
+  animation: none;
 }
 .cursor { animation: blink 1s step-end infinite; color: var(--neon); }
 @keyframes blink { 50% { opacity: 0; } }
@@ -66,6 +105,10 @@ body {
   background: rgba(155,231,255,0.05); color: var(--neon);
   box-shadow: 0 0 14px rgba(155,231,255,0.12) inset;
 }
+[data-theme="light"] .badge {
+  background: rgba(21,101,192,0.07);
+  box-shadow: none;
+}
 
 /* ---------- card glass ---------- */
 .card {
@@ -75,12 +118,19 @@ body {
   padding: 24px;
   margin-bottom: 22px;
   box-shadow: 0 0 24px rgba(0,0,0,0.35);
+  transition: background .35s ease, border-color .35s ease, box-shadow .35s ease;
+}
+[data-theme="light"] .card {
+  box-shadow: 0 6px 24px rgba(30,60,120,.10);
 }
 @media (min-width: 701px) { .card { backdrop-filter: blur(10px); } }
 .card h2, h2.neon-sub {
   font-size: 13px; letter-spacing: 3px; text-transform: uppercase;
   color: var(--neon); font-weight: 500; margin-bottom: 14px;
   text-shadow: 0 0 12px rgba(155,231,255,0.55);
+}
+[data-theme="light"] .card h2, [data-theme="light"] h2.neon-sub {
+  text-shadow: none;
 }
 .card p { margin-bottom: 8px; }
 .dim { color: var(--dim); font-size: 13.5px; }
@@ -98,6 +148,10 @@ main { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
   border: 1px solid var(--line);
   box-shadow: 0 0 30px rgba(155,231,255,0.10);
   background: linear-gradient(135deg, #12122a 0%, #1a1030 50%, #2a0f26 100%);
+}
+[data-theme="light"] .photo-frame {
+  background: linear-gradient(135deg, #dbe4f5 0%, #e9e4f7 50%, #f6e3f1 100%);
+  box-shadow: 0 6px 24px rgba(30,60,120,.12);
 }
 .photo-img { width:100%; height:100%; object-fit:cover; }
 .photo-placeholder {
@@ -120,6 +174,7 @@ main { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
   height: 6px; border-radius: 99px; background: rgba(155,231,255,0.08);
   margin: 14px 0 8px; overflow: hidden;
 }
+[data-theme="light"] .bar { background: rgba(21,101,192,.12); }
 .bar span {
   display: block; height: 100%;
   background: linear-gradient(90deg, var(--neon), var(--mag), var(--neon2));
@@ -137,6 +192,9 @@ main { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
   position: relative; border-radius: 12px; overflow: hidden;
   border: 1px solid var(--line); aspect-ratio: 3/4;
   background: linear-gradient(150deg, #141428, #1f1430);
+}
+[data-theme="light"] .gcard {
+  background: linear-gradient(150deg, #e3e9f7, #efe7f7);
 }
 .gcard img { width:100%; height:100%; object-fit:cover; display:block; transition: transform .5s ease, filter .5s ease; filter: saturate(.85); }
 .gcard:hover img { transform: scale(1.06); filter: saturate(1.1); }
@@ -157,6 +215,7 @@ main { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
   color: var(--neon); margin-right: 14px; letter-spacing: 2px;
   text-shadow: 0 0 8px var(--neon);
 }
+[data-theme="light"] .reasons li::before { text-shadow: none; }
 .reasons li:last-child { border-bottom: none; }
 
 /* ---------- audio ---------- */
