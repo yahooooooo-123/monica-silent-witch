@@ -151,20 +151,31 @@
       <h2 class="neon-sub">Gallery</h2>
       <p class="dim" style="text-align:center; margin-bottom:16px">Ganti 3 file ini dengan foto Monica favoritmu (monica1/2/3.jpg). Kalau kosong, placeholder tetap aesthetic.</p>
       <div class="gallery-grid">
-        <div class="gcard anim">
+        <div class="gcard anim" onclick="openLightbox('monica1.jpg', 'Monica 1')">
           <img src="monica1.jpg" alt="Monica 1" onerror="this.style.display='none'"/>
           <div class="gph">monica1.jpg</div>
         </div>
-        <div class="gcard anim">
+        <div class="gcard anim" onclick="openLightbox('monica2.jpg', 'Monica 2')">
           <img src="monica2.jpg" alt="Monica 2" onerror="this.style.display='none'"/>
           <div class="gph">monica2.jpg</div>
         </div>
-        <div class="gcard anim">
+        <div class="gcard anim" onclick="openLightbox('monica3.jpg', 'Monica 3')">
           <img src="monica3.jpg" alt="Monica 3" onerror="this.style.display='none'"/>
           <div class="gph">monica3.jpg</div>
         </div>
       </div>
     </section>
+
+    <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+      <button class="lightbox-close" aria-label="Tutup">&times;</button>
+      <div class="lightbox-content">
+        <button class="lightbox-prev" aria-label="Sebelumnya">&#10094;</button>
+        <img id="lightbox-img" src="" alt="Preview">
+        <p id="lightbox-caption" class="lightbox-caption"></p>
+        <button class="lightbox-next" aria-label="Selanjutnya">&#10095;</button>
+      </div>
+    </div>
 
     <!-- 10 FACTS -->
     <section class="reasons card anim">
@@ -228,6 +239,38 @@ else { root.setAttribute('data-theme','dark'); setIcon('dark'); }
 btn.addEventListener('click', () => {
   const cur = root.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   apply(cur === 'dark' ? 'light' : 'dark');
+});
+
+// lightbox
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightbox-img');
+const lightboxCaption = document.getElementById('lightbox-caption');
+const galleryFiles = ['monica1.jpg', 'monica2.jpg', 'monica3.jpg'];
+let current = 0;
+
+function openLightbox(file, caption){
+  current = galleryFiles.indexOf(file);
+  lightboxImg.src = file;
+  lightboxCaption.textContent = caption;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  lightbox.classList.remove('open');
+  document.body.style.overflow = '';
+}
+function nav(dir){
+  current = (current + dir + galleryFiles.length) % galleryFiles.length;
+  lightboxImg.src = galleryFiles[current];
+  lightboxCaption.textContent = lightboxImg.alt || galleryFiles[current];
+}
+document.querySelector('.lightbox-prev').addEventListener('click', e => { e.stopPropagation(); nav(-1); });
+document.querySelector('.lightbox-next').addEventListener('click', e => { e.stopPropagation(); nav(1); });
+document.addEventListener('keydown', e => {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') nav(-1);
+  if(e.key === 'ArrowRight') nav(1);
 });
 </script>
 </body>

@@ -205,6 +205,62 @@ main { max-width: 980px; margin: 0 auto; padding: 0 20px 40px; }
 }
 .gcard img:not([style*="display: none"]) ~ .gph { display:none; }
 
+/* ---------- lightbox ---------- */
+.gcard { cursor: zoom-in; }
+.lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(3, 3, 8, 0.92);
+  backdrop-filter: blur(6px);
+  display: none;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  cursor: zoom-out;
+}
+.lightbox.open { display: flex; }
+.lightbox-content {
+  position: relative;
+  max-width: min(92vw, 560px);
+  display: flex; flex-direction: column; align-items: center;
+  cursor: default;
+}
+.lightbox-content img {
+  max-width: 100%; max-height: 78vh;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  box-shadow: 0 0 60px rgba(155,231,255,.25);
+  object-fit: contain;
+}
+.lightbox-caption {
+  margin-top: 14px; color: #cfd3e6;
+  font-size: 14px; letter-spacing: 1px; text-align: center;
+}
+.lightbox-close {
+  position: absolute; top: 16px; right: 18px;
+  width: 44px; height: 44px; border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.08); color: #fff;
+  font-size: 26px; line-height: 1; cursor: pointer;
+}
+.lightbox-prev, .lightbox-next {
+  position: absolute; top: 42%;
+  width: 46px; height: 46px; border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.08); color: #fff;
+  font-size: 22px; cursor: pointer;
+}
+.lightbox-prev { left: -58px; }
+.lightbox-next { right: -58px; }
+.lightbox-prev:hover, .lightbox-next:hover, .lightbox-close:hover {
+  background: rgba(155,231,255,.18);
+}
+@media (max-width: 700px) {
+  .lightbox-prev { left: 6px; }
+  .lightbox-next { right: 6px; }
+  .lightbox-prev, .lightbox-next { top: auto; bottom: -60px; }
+  .lightbox-prev { left: calc(50% - 56px); }
+  .lightbox-next { right: calc(50% - 56px); }
+}
+
 /* ---------- 10 facts ---------- */
 .reasons { max-width: 780px; margin: 0 auto 26px; }
 .reasons ol { list-style:none; counter-reset: no; }
